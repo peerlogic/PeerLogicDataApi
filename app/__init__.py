@@ -92,7 +92,7 @@ def get_critique_by_score():
 
     crits = crits.paginate(page, pagelength, False)
 
-    return jsonify(page=crits.page, totalpages=crits.pages, critiques=[item.to_dict() for item in crits.items])
+    return jsonify(page=crits.page, totalpages=crits.pages, records=[item.to_dict() for item in crits.items])
 
 @app.route('/critiques/<crit_id>')
 def get_critique_by_id(crit_id):
@@ -114,12 +114,12 @@ def get_critique_by_eval_mode(eval_mode):
 
     crits = Answer.query.filter_by(evaluation_mode_id=eval_mode).paginate(page, pagelength, False)
 
-    return jsonify(page=crits.page, totalpages=crits.pages, critiques=[item.to_dict() for item in crits.items])
+    return jsonify(page=crits.page, totalpages=crits.pages, records=[item.to_dict() for item in crits.items])
 
 @app.route('/critiques/artifact_id/<artifact_id>')
 def get_critique_by_artifact_id(artifact_id):
     crits = Answer.query.filter_by(assessee_artifact_id=artifact_id).all()
-    return jsonify(critiques=[item.to_dict() for item in crits])
+    return jsonify(records=[item.to_dict() for item in crits])
 
 
 @app.route('/critiques/create_in_task_id')
@@ -167,7 +167,7 @@ def get_critique_by_create_in_task_id_range():
 
     crits = crits.paginate(page, pagelength, False)
 
-    return jsonify(page=crits.page, totalpages=crits.pages, critiques=[item.to_dict() for item in crits.items])
+    return jsonify(page=crits.page, totalpages=crits.pages, records=[item.to_dict() for item in crits.items])
 
 @app.route('/critiques/create_in_task_id/<task_id>')
 def get_critique_by_create_in_task_id(task_id):
@@ -195,7 +195,7 @@ def get_critique_by_create_in_task_id(task_id):
 
     crits = crits.paginate(page, pagelength, False)
 
-    return jsonify(page=crits.page, totalpages=crits.pages, critiques=[item.to_dict() for item in crits.items])
+    return jsonify(page=crits.page, totalpages=crits.pages, records=[item.to_dict() for item in crits.items])
 
 @app.route('/critiques/create_in_task_id/<task_id>/assessor_id/<assessor_id>')
 def get_critique_by_create_in_task_id_and_assessor_id(task_id, assessor_id):
@@ -223,7 +223,7 @@ def get_critique_by_create_in_task_id_and_assessor_id(task_id, assessor_id):
 
     crits = crits.paginate(page, pagelength, False)
 
-    return jsonify(page=crits.page, totalpages=crits.pages, critiques=[item.to_dict() for item in crits.items])
+    return jsonify(page=crits.page, totalpages=crits.pages, records=[item.to_dict() for item in crits.items])
 
 @app.route('/critiques/create_in_task_id/<task_id>/assessee_id/<assessee_id>')
 def get_critique_by_create_in_task_id_and_assessee_id(task_id, assessee_id):
@@ -251,7 +251,7 @@ def get_critique_by_create_in_task_id_and_assessee_id(task_id, assessee_id):
 
     crits = crits.paginate(page, pagelength, False)
 
-    return jsonify(page=crits.page, totalpages=crits.pages, critiques=[item.to_dict() for item in crits.items])
+    return jsonify(page=crits.page, totalpages=crits.pages, records=[item.to_dict() for item in crits.items])
 
 @app.route('/critiques/assessor_id/<assessor_id>/assessee_id/<assessee_id>')
 def get_critiques_by_assessor_id_and_assessee_id(assessor_id, assessee_id):
@@ -279,7 +279,7 @@ def get_critiques_by_assessor_id_and_assessee_id(assessor_id, assessee_id):
 
     crits = crits.paginate(page, pagelength, False)
 
-    return jsonify(page=crits.page, totalpages=crits.pages, critiques=[item.to_dict() for item in crits.items])
+    return jsonify(page=crits.page, totalpages=crits.pages, records=[item.to_dict() for item in crits.items])
 
 ############################### ARTIFACT ####################################
 @app.route('/artifact')
@@ -310,11 +310,11 @@ def get_artifacts_by_submitted_in_task(task_id):
 
     crits = Artifact.query.filter_by(submitted_in_task_id=task_id)
 
-    if 'orderby' in locals() and orderby in Answer.__dict__:
+    if 'orderby' in locals() and orderby in Artifact.__dict__:
         if 'order' in locals() and order in ['desc', 'asc']:
             orderby = orderby + " " + order
         crits = crits.order_by(db.text(orderby))
-    elif 'orderby' in locals() and orderby not in Answer.__dict__:
+    elif 'orderby' in locals() and orderby not in Artifact.__dict__:
         return jsonify(error="can't find the property to order the records")
 
     crits = crits.paginate(page, pagelength, False)
@@ -341,11 +341,11 @@ def get_artifacts_by_context_case(context_case):
 
     crits = Artifact.query.filter(Artifact.context_case.ilike("%" + context_case + "%"))
 
-    if 'orderby' in locals() and orderby in Answer.__dict__:
+    if 'orderby' in locals() and orderby in Artifact.__dict__:
         if 'order' in locals() and order in ['desc', 'asc']:
             orderby = orderby + " " + order
         crits = crits.order_by(db.text(orderby))
-    elif 'orderby' in locals() and orderby not in Answer.__dict__:
+    elif 'orderby' in locals() and orderby not in Artifact.__dict__:
         return jsonify(error="can't find the property to order the records")
 
     crits = crits.paginate(page, pagelength, False)
@@ -371,11 +371,11 @@ def get_artifacts_by_content(content):
 
     crits = Artifact.query.filter(Artifact.content.ilike("%" + content + "%"))
 
-    if 'orderby' in locals() and orderby in Answer.__dict__:
+    if 'orderby' in locals() and orderby in Artifact.__dict__:
         if 'order' in locals() and order in ['desc', 'asc']:
             orderby = orderby + " " + order
         crits = crits.order_by(db.text(orderby))
-    elif 'orderby' in locals() and orderby not in Answer.__dict__:
+    elif 'orderby' in locals() and orderby not in Artifact.__dict__:
         return jsonify(error="can't find the property to order the records")
 
     crits = crits.paginate(page, pagelength, False)
@@ -383,9 +383,46 @@ def get_artifacts_by_content(content):
     return jsonify(page=crits.page, totalpages=crits.pages, records=[item.to_dict() for item in crits.items])
 
 
-############################### critiques ####################################
+############################### criterion ####################################
 
+@app.route('/criterion')
+def get_criteria():
+    return get_entities(Criterion)
 
+@app.route('/criterion/<id>')
+def get_criteria_by_id(id):
+    crit = Criterion.query.get(id)
+    return jsonify(artifact=crit.to_dict())
+
+@app.route('/criterion/title/<title>')
+def get_criteria_by_title(title):
+    page = DEFAULT_START_PAGE
+    pagelength = DEFAULT_PAGE_LENGTH
+
+    try:
+        if 'page' in request.args:
+            page = int(request.args.get('page'))
+        if 'pagelength' in request.args:
+            pagelength = int(request.args.get('pagelength'))
+        if 'orderby' in request.args:
+            orderby = request.args.get('orderby')
+        if 'order' in request.args:
+            order = request.args.get('order')
+    except:
+        return jsonify(error="page and pagelength must be numbers")
+
+    crits = Criterion.query.filter(Criterion.title.ilike("%" + title + "%"))
+
+    if 'orderby' in locals() and orderby in Criterion.__dict__:
+        if 'order' in locals() and order in ['desc', 'asc']:
+            orderby = orderby + " " + order
+        crits = crits.order_by(db.text(orderby))
+    elif 'orderby' in locals() and orderby not in Criterion.__dict__:
+        return jsonify(error="can't find the property to order the records")
+
+    crits = crits.paginate(page, pagelength, False)
+
+    return jsonify(page=crits.page, totalpages=crits.pages, records=[item.to_dict() for item in crits.items])
 
 if __name__ == '__main__':
     app.run()
