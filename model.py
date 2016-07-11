@@ -1,4 +1,4 @@
-from app import db
+from routes import db
 import json
 
 from sqlalchemy.inspection import inspect
