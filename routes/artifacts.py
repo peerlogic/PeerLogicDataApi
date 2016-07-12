@@ -106,3 +106,4 @@ def get_artifacts_by_content(content):
     crits = crits.paginate(page, pagelength, False)
 
     return jsonify(page=crits.page, totalpages=crits.pages, records=[item.to_dict() for item in crits.items])
+

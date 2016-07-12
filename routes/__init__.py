@@ -5,11 +5,14 @@ from model import *
 from critiques import crit_api
 from criteria import criteria_api
 from artifacts import artifact_api
+from tasks import task_api
 
 app = Flask(__name__)
 app.register_blueprint(crit_api)
 app.register_blueprint(criteria_api)
 app.register_blueprint(artifact_api)
+app.register_blueprint(task_api)
+
 
 #Include config from config.py
 app.config.from_object('config')
