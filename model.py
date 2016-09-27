@@ -1,7 +1,4 @@
 from routes import db
-import json
-
-from sqlalchemy.inspection import inspect
 
 class Serializer(object):
     def to_dict(self):
