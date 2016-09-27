@@ -80,6 +80,14 @@ def get_records_int_greater_or_less_than(args, model, attribute):
         records = model.query.filter(attribute >= gte, attribute < lt)
     elif 'gt' in locals() and 'lt' in locals():
         records = model.query.filter(attribute > gt, attribute < lt)
+    elif 'gte' in locals():
+        records = model.query.filter(attribute >= gte)
+    elif 'lte' in locals():
+        records = model.query.filter(attribute <= lte)
+    elif 'gt' in locals():
+        records = model.query.filter(attribute > gt)
+    elif 'lt' in locals():
+        records = model.query.filter(attribute < lt)
 
     return records
 
@@ -104,6 +112,14 @@ def get_records_str_greater_or_less_than(args, model, attribute):
         records = model.query.filter(attribute >= gte, attribute < lt)
     elif 'gt' in locals() and 'lt' in locals():
         records = model.query.filter(attribute > gt, attribute < lt)
+    elif 'gte' in locals():
+        records = model.query.filter(attribute >= gte)
+    elif 'lte' in locals():
+        records = model.query.filter(attribute <= lte)
+    elif 'gt' in locals():
+        records = model.query.filter(attribute > gt)
+    elif 'lt' in locals():
+        records = model.query.filter(attribute < lt)
 
     return records
 
@@ -130,5 +146,14 @@ def get_records_datetime_greater_or_less_than(args, model, attribute):
         records = model.query.filter(attribute >= gte, attribute < lt)
     elif 'gt' in locals() and 'lt' in locals():
         records = model.query.filter(attribute > gt, attribute < lt)
+    elif 'gte' in locals():
+        records = model.query.filter(attribute >= gte)
+    elif 'lte' in locals():
+        records = model.query.filter(attribute <= lte)
+    elif 'gt' in locals():
+        records = model.query.filter(attribute > gt)
+    elif 'lt' in locals():
+        records = model.query.filter(attribute < lt)
+
 
     return records

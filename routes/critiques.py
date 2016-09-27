@@ -26,6 +26,17 @@ def get_critique_by_score():
 
     return jsonify(page=crits.page, totalpages=crits.pages, records=[item.to_dict() for item in crits.items])
 
+@crit_api.route('/critiques/rank')
+def get_critique_by_rank():
+
+    try:
+        crits = commons.get_records_int_greater_or_less_than(request.args, Answer, Answer.rank)
+        crits = commons.paginate_and_sort_records(request.args, crits, Answer)
+    except Exception as error:
+        return jsonify(error=error.message)
+
+    return jsonify(page=crits.page, totalpages=crits.pages, records=[item.to_dict() for item in crits.items])
+
 @crit_api.route('/critiques/<crit_id>')
 def get_critique_by_id(crit_id):
     crit = Answer.query.get(crit_id)

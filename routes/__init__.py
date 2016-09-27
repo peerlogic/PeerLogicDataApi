@@ -1,5 +1,5 @@
 
-from flask import Flask, jsonify, request
+from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from model import *
 from critiques import crit_api
@@ -8,7 +8,7 @@ from artifacts import artifact_api
 from tasks import task_api
 from evalmode import eval_mode_api
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='../templates')
 app.register_blueprint(crit_api)
 app.register_blueprint(criteria_api)
 app.register_blueprint(artifact_api)
@@ -22,6 +22,11 @@ app.config.from_object('config')
 #Create an instance of SQLAclhemy
 db = SQLAlchemy(app)
 
+
+
+@app.route('/', methods=['GET'])
+def help():
+    return render_template('index.html')
 
 if __name__ == '__main__':
     app.run()
