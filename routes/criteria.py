@@ -1,10 +1,7 @@
-
-
 from flask import jsonify, request, Blueprint
+
 from model import *
-from routes import constants
 from routes import commons
-import routes
 
 criteria_api = Blueprint('criteria_api', __name__)
 

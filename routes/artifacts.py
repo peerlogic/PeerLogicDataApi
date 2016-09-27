@@ -1,5 +1,5 @@
-
 from flask import jsonify, request, Blueprint
+
 from model import *
 from routes import commons
 

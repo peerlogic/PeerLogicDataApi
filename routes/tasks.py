@@ -1,5 +1,7 @@
-from flask import jsonify, request, Blueprint
 from datetime import datetime
+
+from flask import jsonify, request, Blueprint
+
 from model import *
 from routes import commons
 

@@ -1,7 +1,6 @@
 
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
-from model import *
 from critiques import crit_api
 from criteria import criteria_api
 from artifacts import artifact_api

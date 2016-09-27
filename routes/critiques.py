@@ -1,9 +1,7 @@
-
 from flask import jsonify, request, Blueprint
+
 from model import *
-from routes import constants
 from routes import commons
-import routes
 
 crit_api = Blueprint('crit_api', __name__)
 
