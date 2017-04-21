@@ -10,92 +10,110 @@
     These APIs allow developers to query data using a RESTful interface. The initial version of the APIs allow you to retrieve data from the following tables :
     - Artifact
     - Criteria
-    - Critique
+    - Answers <b>(formerly Critiques)</b>
     - EvalMode
     - Tasks
 
+Filtering Data
+    - Each REST API returns paginated data. The default paging is set to 30 records. this can be changed by passing request arguments in the URL
+      e.g.,: ?page=1&amp;pagelength=10, request page 1 of the data
+    - Moreover, the API also support ordering the data based on a column in the table.
+      e.g.,: ?orderby=id&amp;order=desc
+    - The API also allows filtering columns with greater (gt), less than(lt), greater or equal than(gte), less or equal than(lte)
+      e.g.,:
+       - Integer datatype --> http://peerlogic.csc.ncsu.edu/datawarehouse/Answers/score?gte=1&amp;lte=2
+       - Date datatype --> http://peerlogic.csc.ncsu.edu/datawarehouse/tasks/start?gte=2016-01-01 00:00&amp;lte=2016-01-31 23:59&amp;orderby=starts_at
 
-Artifact
+
+Artifacts
     This table stores metadata of the work that is submitted and to be peer reviewed
     This table has five columns, including:
     - content: contains the content of this artifact, when available
       The Api allows filtering Artifact according to its content
-        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/artifact/content/Parker
+        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/artifacts/content/Parker
     - context_case: contains the context case, to which its task belong to
       The Api allows filtering Artifact according to its context_case
-        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/artifact/context_case/Metaprogramming
+        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/artifacts/context_case/Metaprogramming
     - elaboration: contains other description of this submission
     - id: contains the id of this submission e.g., "EZ-00025562"
       The Api allows filtering Artifact according to its id
-        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/artifact/CV-00000001
+        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/artifacts/CV-00000001
     - submitted_in_task_id: contains the id of the task, to which it belongs to e.g., "EZ-00005480"
       The Api allows filtering Artifact according to its submitted_in_task_id
-        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/artifact/submitted_in_task_id/CV-00000001
+        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/artifacts/submitted_in_task_id/CV-00000001
 
 Criteria
     This table stores the criteria that are used by the reviewers to assess their peers' work
     This table has six columns, including:
     - description:
       The Api allows filtering Artifact according to its description
-        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/criterion/description/some desc
+        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/criteria/description/some_desc
     - id: "CV-00000032"
       The Api allows filtering Artifact according to its id
-        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/criterion/CV-00000001
+        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/criteria/CV-00000001
     - max_score:
     - min_score:
       The Api allows filtering Artifact according to its min and max scores
-        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/criterion/minscore/0/maxscore/100
+        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/criteria/minscore/0/maxscore/100
     - title:
       The Api allows filtering Artifact according to its Title
-        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/criterion/title/strength
+        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/criteria/title/strength
     - type:
       The Api allows filtering Artifact according to its Type
-        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/criterion/type/rank
+        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/criteria/type/rank
 
-Critiques
+Answers
+    This table stores the answers ( or comments or critiques) to rubric questions that are used by the reviewers to assess their peers' work
+    This table has 12 columns, including:
     - assessee_artifact_id: "CV-00000143",
-      The Api allows filtering Critiques according to its assessee_artifact_id
-        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/critiques/create_in_task_id/CV-00000015
+      The Api allows filtering Answers according to its assessee_artifact_id
+        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/answers/create_in_task_id/CV-00000015
     - assessee_actor_id: "CV-00000146",
     - assessor_actor_id: "CV-00000141",
-      The Api allows filtering Critiques according to its assessee_actor_id and assessor_actor_id
-        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/critiques/assessor_id/CV-00000141/assessee_id/CV-00000146
+      The Api allows filtering Answers according to its assessee_actor_id and assessor_actor_id
+        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/answers/assessor_id/CV-00000141/assessee_id/CV-00000146
     - comment: "",
     - comment2: "",
     - create_in_task_id: "CV-00000015",
-      The Api allows filtering Critiques according to its create_in_task_id
-        e.g.,: -http://peerlogic.csc.ncsu.edu/datawarehouse/critiques/create_in_task_id/CV-00000015
-             -http://peerlogic.csc.ncsu.edu/datawarehouse/critiques/create_in_task_id/CV-00000015/assessor_id/CV-00000146
-             -http://peerlogic.csc.ncsu.edu/datawarehouse/critiques/create_in_task_id/CV-00000015/assessee_id/CV-00000137
+      The Api allows filtering Answers according to its create_in_task_id
+        e.g.,: -http://peerlogic.csc.ncsu.edu/datawarehouse/answers/create_in_task_id/CV-00000015
+             -http://peerlogic.csc.ncsu.edu/datawarehouse/answers/create_in_task_id/CV-00000015/assessor_id/CV-00000146
+             -http://peerlogic.csc.ncsu.edu/datawarehouse/answers/create_in_task_id/CV-00000015/assessee_id/CV-00000137
     
     - criterion_id: "CV-00000035",
     - evaluation_mode_id: 4,
-      The Api allows filtering Critiques according to its evaluation_mode_id
-        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/critiques/evaluation_mode_id/4
+      The Api allows filtering Answers according to its evaluation_mode_id
+        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/answers/evaluation_mode_id/4
     - id: 
-      The Api allows filtering Critiques according to its id
-        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/critiques/CV-00000001
+      The Api allows filtering Answers according to its id
+        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/answers/CV-00000001
     - rank: "",
-      The Api allows filtering Critiques according to the rank
-        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/criterion/rank?gt=0&amp;lt=4
+      The Api allows filtering Answers according to the rank
+        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/answers/rank?gt=0&amp;lt=4
     - rank: ""
-      The Api allows filtering Critiques according to the score
-        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/criterion/score?gt=0&amp;lt=4
+      The Api allows filtering Answers according to the score
+        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/answers/score?gt=0&amp;lt=4
+    - submitted_at
+      The Api allows filtering Tasks according to the time it was submitted
+        http://peerlogic.csc.ncsu.edu/datawarehouse/answers/submitted_between/2010-01-01 00:00/2017-01-01 00:00
+        http://peerlogic.csc.ncsu.edu/datawarehouse/answers/submitted_at?gt=2016-10-01%2000:00&amp;lt=2016-10-02%2000:00&amp;orderby=submitted_at&amp;order=asc
 
 Tasks
+    This table stores the tasks assigned to the students e.g., do the assignment, assess their peers' work, do a backreview
+    This table has 13 columns, including:
     - app_name: 
     - assignment_title:
       The Api allows filtering Tasks according to its assignment_title
-        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/assignment_title/Algebra 101
+        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/tasks/assignment_title/Algebra 101
     - cip_level1_code:
       The Api allows filtering Tasks according to its cip_level1_code
-        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/cip_level1_code/101
+        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/tasks/cip_level1_code/101
     - cip_level2_code:
       The Api allows filtering Tasks according to its cip_level2_code
-        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/cip_level2_code/101
+        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/tasks/cip_level2_code/101
     - cip_level3_code:
       The Api allows filtering Tasks according to its cip_level3_code
-        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/cip_level3_code/101
+        e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/tasks/cip_level3_code/101
     - course_title:
     - id:
       The Api allows filtering Tasks according to its id
@@ -117,15 +135,12 @@ Tasks
       The Api allow filtering Tasks according to its task_type
         e.g., http://peerlogic.csc.ncsu.edu/datawarehouse/tasks/task_type/submission
 
-Filtering Data
-    - Each REST API returns paginated data. The default paging is set to 30 records. this can be changed by passing request arguments in the URL
-      e.g.,: ?page=1&amp;pagelength=10, request page 1 of the data
-    - Moreover, the API also support ordering the data based on a column in the table.
-      e.g.,: ?orderby=id&amp;order=desc
-    - The API also allows filtering columns with greater (gt), less than(lt), greater or equal than(gte), less or equal than(lte)
-      e.g.,:
-       - Integer datatype --> http://peerlogic.csc.ncsu.edu/datawarehouse/critiques/score?gte=1&amp;lte=2
-       - Date datatype --> http://peerlogic.csc.ncsu.edu/datawarehouse/tasks/start?gte=2016-01-01 00:00&amp;lte=2016-01-31 23:59&amp;orderby=starts_at
+Eval_Modes
+    This table stores the evaluation mode whether it was ranking, rating or combination of the two
+    This table has 2 columns, including:
+    - id
+    - description
+
 </pre>
 </body>
 </html>

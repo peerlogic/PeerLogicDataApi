@@ -5,16 +5,16 @@ from routes import commons
 
 criteria_api = Blueprint('criteria_api', __name__)
 
-@criteria_api.route('/criterion')
+@criteria_api.route('/criteria')
 def get_criteria():
     return commons.get_all_records_paginated__sort(request.args, Criterion)
 
-@criteria_api.route('/criterion/<id>')
+@criteria_api.route('/criteria/<id>')
 def get_criteria_by_id(id):
     crit = Criterion.query.get(id)
     return jsonify(artifact=crit.to_dict())
 
-@criteria_api.route('/criterion/title/<title>')
+@criteria_api.route('/criteria/title/<title>')
 def get_criteria_by_title(title):
 
     crits = Criterion.query.filter(Criterion.title.ilike("%" + title + "%"))
@@ -26,7 +26,7 @@ def get_criteria_by_title(title):
 
     return jsonify(page=crits.page, totalpages=crits.pages, records=[item.to_dict() for item in crits.items])
 
-@criteria_api.route('/criterion/description/<desc>')
+@criteria_api.route('/criteria/description/<desc>')
 def get_criteria_by_desc(desc):
     crits = Criterion.query.filter(Criterion.description.ilike("%" + desc + "%"))
 
@@ -37,7 +37,7 @@ def get_criteria_by_desc(desc):
 
     return jsonify(page=crits.page, totalpages=crits.pages, records=[item.to_dict() for item in crits.items])
 
-@criteria_api.route('/criterion/type/<type>')
+@criteria_api.route('/criteria/type/<type>')
 def get_criteria_by_type(type):
 
     crits = Criterion.query.filter(Criterion.type.ilike("%" + type + "%"))
@@ -49,7 +49,7 @@ def get_criteria_by_type(type):
 
     return jsonify(page=crits.page, totalpages=crits.pages, records=[item.to_dict() for item in crits.items])
 
-@criteria_api.route('/criterion/minscore/<minscore>/maxscore/<maxscore>')
+@criteria_api.route('/criteria/minscore/<minscore>/maxscore/<maxscore>')
 def get_criteria_by_score(minscore, maxscore):
 
     crits = Criterion.query.filter_by(min_score = minscore, max_score = maxscore)
@@ -61,7 +61,7 @@ def get_criteria_by_score(minscore, maxscore):
 
     return jsonify(page=crits.page, totalpages=crits.pages, records=[item.to_dict() for item in crits.items])
 
-@criteria_api.route('/criterion/weight/<weight>')
+@criteria_api.route('/criteria/weight/<weight>')
 def get_criteria_by_weight(weight):
 
     crits = Criterion.query.filter_by(weight = weight)

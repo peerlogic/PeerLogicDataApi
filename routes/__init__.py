@@ -1,11 +1,11 @@
 
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
-from critiques import crit_api
+from answers import crit_api
 from criteria import criteria_api
 from artifacts import artifact_api
 from tasks import task_api
-from evalmode import eval_mode_api
+from evalmodes import eval_mode_api
 
 app = Flask(__name__, template_folder='../templates')
 app.register_blueprint(crit_api)

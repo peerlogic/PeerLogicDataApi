@@ -1,7 +1,3 @@
-# coding: utf-8
-#from sqlalchemy import Column, db.DateTime, db.Float, db.ForeignKey, db.Integer, db.String, db.Table
-#from sqlalchemy.orm import db.relationship
-from sqlalchemy.ext.declarative import declarative_base
 from routes import db
 
 class Serializer(object):
@@ -26,39 +22,36 @@ class Serializer(object):
                 d[c.name] = v
         return d
 
-
-
-t_actor_participants = db.Table(
-    'actor_participants', db.metadata,
-    db.Column('actor_id', db.ForeignKey(u'actors.id'), primary_key=True, nullable=False),
-    db.Column('participant_id', db.ForeignKey(u'participants.id'), primary_key=True, nullable=False, index=True)
-)
-
-
 class Actor(db.Model, Serializer):
-    __tablename__ = 'actors'
+    __tablename__ = 'actor'
 
     id = db.Column(db.String(20), primary_key=True)
     role = db.Column(db.String(63))
 
-    participants = db.relationship(u'Participant', secondary='actor_participants')
+    participants = db.relationship(u'Participant', secondary='actor_participant')
+
+
+t_actor_participant = db.Table(
+    'actor_participant', db.metadata,
+    db.Column('actor_id', db.ForeignKey(u'actor.id'), primary_key=True, nullable=False),
+    db.Column('participant_id', db.ForeignKey(u'participant.id'), primary_key=True, nullable=False, index=True)
+)
 
 
 class Answer(db.Model, Serializer):
-    __tablename__ = 'answers'
+    __tablename__ = 'answer'
 
     id = db.Column(db.String(20), primary_key=True)
-    assessor_actor_id = db.Column(db.ForeignKey(u'actors.id'), index=True)
-    assessee_actor_id = db.Column(db.ForeignKey(u'actors.id'), index=True)
-    assessee_artifact_id = db.Column(db.ForeignKey(u'artifacts.id'), index=True)
-    criterion_id = db.Column(db.ForeignKey(u'criteria.id'), index=True)
-    evaluation_mode_id = db.Column(db.ForeignKey(u'eval_modes.id'), index=True)
+    assessor_actor_id = db.Column(db.ForeignKey(u'actor.id'), index=True)
+    assessee_actor_id = db.Column(db.ForeignKey(u'actor.id'), index=True)
+    assessee_artifact_id = db.Column(db.ForeignKey(u'artifact.id'), index=True)
+    criterion_id = db.Column(db.ForeignKey(u'criterion.id'), index=True)
+    evaluation_mode_id = db.Column(db.ForeignKey(u'eval_mode.id'), index=True)
     comment = db.Column(db.String)
     comment2 = db.Column(db.String)
     rank = db.Column(db.Integer)
     score = db.Column(db.Float)
-    create_in_task_id = db.Column(db.ForeignKey(u'tasks.id'), index=True)
-    submitted_at = db.Column(db.DateTime)
+    create_in_task_id = db.Column(db.ForeignKey(u'task.id'), index=True)
 
     assessee_actor = db.relationship(u'Actor', primaryjoin='Answer.assessee_actor_id == Actor.id')
     assessee_artifact = db.relationship(u'Artifact')
@@ -69,19 +62,19 @@ class Answer(db.Model, Serializer):
 
 
 class Artifact(db.Model, Serializer):
-    __tablename__ = 'artifacts'
+    __tablename__ = 'artifact'
 
     id = db.Column(db.String(20), primary_key=True)
     content = db.Column(db.String)
     elaboration = db.Column(db.String)
-    submitted_in_task_id = db.Column(db.ForeignKey(u'tasks.id'), index=True)
+    submitted_in_task_id = db.Column(db.ForeignKey(u'task.id'), index=True)
     context_case = db.Column(db.String(255))
 
     submitted_in_task = db.relationship(u'Task')
 
 
 class Criterion(db.Model, Serializer):
-    __tablename__ = 'criteria'
+    __tablename__ = 'criterion'
 
     id = db.Column(db.String(20), primary_key=True)
     title = db.Column(db.String)
@@ -89,18 +82,17 @@ class Criterion(db.Model, Serializer):
     type = db.Column(db.String(63))
     min_score = db.Column(db.Float)
     max_score = db.Column(db.Float)
-    weight = db.Column(db.Float)
 
 
 class EvalMode(db.Model, Serializer):
-    __tablename__ = 'eval_modes'
+    __tablename__ = 'eval_mode'
 
     id = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.String(255))
 
 
-t_items = db.Table(
-    'items', db.metadata,
+t_item = db.Table(
+    'item', db.metadata,
     db.Column('id', db.String(20)),
     db.Column('content', db.String),
     db.Column('reference_id', db.String(20)),
@@ -109,14 +101,14 @@ t_items = db.Table(
 
 
 class Participant(db.Model, Serializer):
-    __tablename__ = 'participants'
+    __tablename__ = 'participant'
 
     id = db.Column(db.String(20), primary_key=True)
     app_name = db.Column(db.String(255))
 
 
 class Task(db.Model, Serializer):
-    __tablename__ = 'tasks'
+    __tablename__ = 'task'
 
     id = db.Column(db.String(20), primary_key=True)
     task_type = db.Column(db.String(63))
@@ -131,3 +123,4 @@ class Task(db.Model, Serializer):
     cip_level2_code = db.Column(db.String(255))
     cip_level3_code = db.Column(db.String(255))
     app_name = db.Column(db.String(255))
+
