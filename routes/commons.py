@@ -2,6 +2,8 @@ from flask import jsonify, request
 from routes import constants
 import routes
 from datetime import datetime
+from sqlalchemy.sql.expression import func
+
 
 def get_all_records_paginated__sort(args, model):
     page = constants.DEFAULT_START_PAGE
@@ -45,7 +47,7 @@ def paginate_and_sort_records(args, records, model):
         if 'order' in args:
             order = args.get('order')
     except:
-        raise ValueError("page and pagelength must be numbers")
+        raise ValueError("page and pagelength must be integers")
 
     if 'orderby' in locals() and orderby in model.__dict__:
         if 'order' in locals() and order in ['desc', 'asc']:
@@ -70,7 +72,7 @@ def get_records_int_greater_or_less_than(args, model, attribute):
         if 'lt' in request.args:
             lt = int(request.args.get('lt'))
     except:
-        raise ValueError("gt, lt, gte, lte query string must be numbers")
+        raise ValueError("gt, lt, gte, lte values must be integers")
 
     if 'gte' in locals() and 'lte' in locals():
         records = model.query.filter(attribute >= gte, attribute <= lte)
@@ -102,7 +104,7 @@ def get_records_str_greater_or_less_than(args, model, attribute):
         if 'lt' in request.args:
             lt = request.args.get('lt')
     except:
-        raise ValueError("gt, lt, gte, lte query string must be string")
+        raise ValueError("gt, lt, gte, lte values must be string")
 
     if 'gte' in locals() and 'lte' in locals():
         records = model.query.filter(attribute >= gte, attribute <= lte)
@@ -123,6 +125,38 @@ def get_records_str_greater_or_less_than(args, model, attribute):
 
     return records
 
+def get_records_len_str_greater_or_less_than(args, model, attribute):
+    try:
+        if 'gte' in request.args:
+            gte = int(request.args.get('gte'))
+        if 'lte' in request.args:
+            lte = int(request.args.get('lte'))
+        if 'gt' in request.args:
+            gt = int(request.args.get('gt'))
+        if 'lt' in request.args:
+            lt = int(request.args.get('lt'))
+    except:
+        raise ValueError("gt, lt, gte, lte values must be integer")
+
+    if 'gte' in locals() and 'lte' in locals():
+        records = model.query.filter(func.length(attribute) >= gte, func.length(attribute) <= lte)
+    elif 'gt' in locals() and 'lte' in locals():
+        records = model.query.filter(func.length(attribute) > gt, func.length(attribute) <= lte)
+    elif 'gte' in locals() and 'lt' in locals():
+        records = model.query.filter(func.length(attribute) >= gte, func.length(attribute) < lt)
+    elif 'gt' in locals() and 'lt' in locals():
+        records = model.query.filter(func.length(attribute) > gt, func.length(attribute) < lt)
+    elif 'gte' in locals():
+        records = model.query.filter(func.length(attribute) >= gte)
+    elif 'lte' in locals():
+        records = model.query.filter(func.length(attribute) <= lte)
+    elif 'gt' in locals():
+        records = model.query.filter(func.length(attribute) > gt)
+    elif 'lt' in locals():
+        records = model.query.filter(func.length(attribute) < lt)
+
+    return records
+
 def get_records_datetime_greater_or_less_than(args, model, attribute):
 
     #follow ISO 8601 date notation
@@ -136,7 +170,7 @@ def get_records_datetime_greater_or_less_than(args, model, attribute):
         if 'lt' in request.args:
             lt = datetime.strptime(request.args.get('lt'), '%Y-%m-%d %H:%M')
     except:
-        raise ValueError("gt, lt, gte, lte query string must be datetime with ISO 8601 format (YYYY-mm-dd HH:MM) ")
+        raise ValueError("gt, lt, gte, lte values must be datetime with ISO 8601 format (YYYY-mm-dd HH:MM) ")
 
     if 'gte' in locals() and 'lte' in locals():
         records = model.query.filter(attribute >= gte, attribute <= lte)

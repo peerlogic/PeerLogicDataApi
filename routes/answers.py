@@ -8,8 +8,15 @@ crit_api = Blueprint('crit_api', __name__)
 ############################### critiques ####################################
 @crit_api.route('/answers')
 def get_answers():
+
     try:
-        return commons.get_all_records_paginated__sort(request.args, Answer)
+        if 'field_len' in request.args:
+            len_field = request.args.get('field_len')
+            answers = commons.get_records_len_str_greater_or_less_than(request.args, Answer, getattr(Answer, len_field))
+            answers = commons.paginate_and_sort_records(request.args, answers, Answer)
+            return jsonify(page=answers.page, totalpages=answers.pages, records=[item.to_dict() for item in answers.items])
+        else:
+            return commons.get_all_records_paginated__sort(request.args, Answer)
     except Exception as error:
         return jsonify(error=error.message)
 
@@ -107,6 +114,7 @@ def get_answers_by_create_in_task_id_and_assessee_id(task_id, assessee_id):
 
 @crit_api.route('/answers/assessor_id/<assessor_id>/assessee_id/<assessee_id>')
 def get_answers_by_assessor_id_and_assessee_id(assessor_id, assessee_id):
+
 
     crits = Answer.query.filter_by(assessor_actor_id=assessor_id, assessee_actor_id=assessee_id)
 
