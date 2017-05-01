@@ -3,6 +3,58 @@ from routes import constants
 import routes
 from datetime import datetime
 from sqlalchemy.sql.expression import func
+import json
+
+def query_by_attrs(model, attrs):
+    filter_args = []
+
+    records = model.query
+
+    for attr in attrs:
+        str_len = False
+
+        op = json.loads(attrs[attr])
+
+        if attr.endswith('_len'):
+            str_len = True
+            attr = attr[:-4]
+        #try:
+
+        if 'gte' in  op.keys():
+            if str_len:
+                records = records.filter(func.length(getattr(model, attr)) >=op['gte'])
+            else:
+                records = records.filter(getattr(model, attr) >= op['gte'])
+        if 'lte' in op.keys():
+            if str_len:
+                records = records.filter(func.length(getattr(model, attr)) <= op['lte'])
+            else:
+                records = records.filter(getattr(model, attr) <= op['lte'])
+        if 'gt' in op.keys():
+            if str_len:
+                records = records.filter(func.length(getattr(model, attr)) > op['gt'])
+            else:
+               records = records.filter(getattr(model, attr) > op['gt'])
+        if 'lt' in op.keys():
+            if str_len:
+               records = records.filter(func.length(getattr(model, attr)) < op['lt'])
+            else:
+               records = records.filter(getattr(model, attr) < op['lt'])
+        if 'eq' in op.keys():
+            if str_len:
+                records = records.filter(func.length(getattr(model, attr)) == op['eq'])
+            else:
+                records = records.filter(getattr(model, attr) == op['eq'])
+        if 'ne' in op.keys():
+            if str_len:
+                records = records.filter(func.length(getattr(model, attr)) <> op['ne'])
+            else:
+                records = records.filter(getattr(model, attr) <> op['ne'])
+        #except:
+        #    raise ValueError("gt, lt, gte, lte values must be in a json format e.g., {'lt':'5', 'gt':'3'}")
+
+    return records
+
 
 
 def get_all_records_paginated__sort(args, model):
@@ -126,6 +178,9 @@ def get_records_str_greater_or_less_than(args, model, attribute):
     return records
 
 def get_records_len_str_greater_or_less_than(args, model, attribute):
+
+    attr_pos = request.args.getlist('field_len').index(attribute)
+    attr_op = request.args
     try:
         if 'gte' in request.args:
             gte = int(request.args.get('gte'))

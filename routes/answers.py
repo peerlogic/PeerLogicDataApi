@@ -3,20 +3,42 @@ from flask import jsonify, request, Blueprint
 from model import *
 from routes import commons
 from datetime import datetime
+import inspect
 crit_api = Blueprint('crit_api', __name__)
 
+def get_attrs(klass):
+  return [k for k in klass.__dict__.keys()
+            if not k.startswith('__') and not k.startswith('_')
+            and not k.endswith('__') and not k.endswith('_')]
+
+def get_query_class_attributes(attrs, args):
+    query_attr = {}
+    for attr in attrs:
+        attr_len = attr + '_len'
+        if attr in request.args:
+            query_attr[attr] = request.args.get(attr)
+        if attr_len in request.args:
+            query_attr[attr_len] = request.args.get(attr_len)
+    return query_attr
+
+
 ############################### critiques ####################################
+
+
+
 @crit_api.route('/answers')
 def get_answers():
 
     try:
-        if 'field_len' in request.args:
-            len_field = request.args.get('field_len')
-            answers = commons.get_records_len_str_greater_or_less_than(request.args, Answer, getattr(Answer, len_field))
+        query_attr = get_query_class_attributes(get_attrs(Answer), request.args)
+
+        if len(query_attr) > 0:
+            answers = commons.query_by_attrs(Answer, query_attr)
             answers = commons.paginate_and_sort_records(request.args, answers, Answer)
             return jsonify(page=answers.page, totalpages=answers.pages, records=[item.to_dict() for item in answers.items])
         else:
             return commons.get_all_records_paginated__sort(request.args, Answer)
+
     except Exception as error:
         return jsonify(error=error.message)
 
