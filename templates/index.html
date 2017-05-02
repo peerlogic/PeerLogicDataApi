@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>The Data Warehouse REST API</title>
 </head>
 <body>
-<h1> The data warehouse REST APIs</h1>
+<h1> The Data Warehouse REST API</h1>
 <pre>
     These APIs allow developers to query data using a RESTful interface. The initial version of the APIs allow you to retrieve data from the following tables :
     - Artifact
@@ -23,7 +23,11 @@ Filtering Data
       e.g.,:
        - Integer datatype --> http://peerlogic.csc.ncsu.edu/datawarehouse/answers/score?gte=1&amp;lte=2
        - Date datatype --> http://peerlogic.csc.ncsu.edu/datawarehouse/tasks/start?gte=2016-01-01 00:00&amp;lte=2016-01-31 23:59&amp;orderby=starts_at
-
+    - The API allows multiple filters to be combined like "AND" operator in SQL. Basically you can put the column names in the query string, and add comparisson operators (gt, lt, gte, lte, eq (equal to), ne (not equal to)) and the values that the columns are compared with in a json format.
+      If you want to get the length of a string in a column, just add “_len” at the end of the column name as a suffix (see example below):
+      e.g.,:
+       - http://peerlogic.csc.ncsu.edu/datawarehouse/answers?comment_len={"gt":5}&amp;score={"ne":null}
+       - http://peerlogic.csc.ncsu.edu/datawarehouse/answers?comment_len={"gt":5}&amp;score={"gt":0,"lt":2}
 
 Artifacts
     This table stores metadata of the work that is submitted and to be peer reviewed
